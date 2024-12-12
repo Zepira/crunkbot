@@ -45,6 +45,12 @@ export const viewport: Viewport = {
     { media: "(prefers-color-scheme: dark)", color: "red" },
   ],
 };
+const asdasd = {
+  ".nav": {
+    visibility: "hidden",
+  },
+  height: "100vh",
+};
 
 export default function RootLayout({
   children,
@@ -56,7 +62,7 @@ export default function RootLayout({
       <head />
       <body
         className={clsx("  font-sans antialiased", fontSans.variable)}
-        style={{ height: "100vh" }}
+        style={asdasd}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <main
