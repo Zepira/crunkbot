@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: "Arcane";
+    src: url("../public/fonts/Arcane Nine.otf");
+  }

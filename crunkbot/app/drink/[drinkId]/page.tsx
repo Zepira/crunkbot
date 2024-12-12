@@ -1,18 +1,20 @@
+"use client";
 import Image from "next/image";
+import { Button } from "@nextui-org/button";
+import { useParams, useRouter } from "next/navigation";
+import { IoMdArrowRoundBack } from "react-icons/io";
 
-import { title } from "@/components/primitives";
 import { dummyData } from "@/app/dummyData";
 import { Drink } from "@/app/types";
+import { TopBar } from "@/components/top-bar";
 
-export default async function DrinkPage({
-  params,
-}: {
-  params: Promise<{ drinkId: string }>;
-}) {
-  const drinkId = (await params).drinkId;
+export default function DrinkPage() {
+  const router = useRouter();
+
+  const params = useParams<{ drinkId: string }>();
 
   const drink: Drink | undefined = dummyData.drinks.find(
-    (d) => d.idDrink === drinkId
+    (d) => d.idDrink === params.drinkId
   );
   let ingredientList = [];
 
@@ -63,29 +65,60 @@ export default async function DrinkPage({
 
   return (
     <div>
-      {drinkId && (
-        <>
-          {drink?.strDrinkThumb && (
-            <Image
-              alt={`A picture of a ${drink.strDrink}`}
-              height={400}
-              src={drink?.strDrinkThumb}
-              width={400}
-            />
-          )}
-          <h1 className={title()}>{drink?.strDrink}</h1>
-          {ingredientList.length > 0 &&
-            ingredientList.map((ingredient, index) => (
-              <div key={index}>
-                <span>{ingredient.ingredient} </span>
-                <span>{ingredient.measure}</span>
-              </div>
-            ))}
-          <div style={{ marginTop: 20 }}>
-            <span>{drink?.strInstructions}</span>
-          </div>
-        </>
-      )}
+      <TopBar
+        BarIcon={<IoMdArrowRoundBack size={30} onClick={() => router.back()} />}
+      />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+
+          width: "100%",
+          overflow: "auto",
+          height: "82%",
+          justifyContent: "center",
+          alignItems: "center",
+          paddingLeft: 20,
+          paddingRight: 20,
+        }}
+      >
+        {drink && (
+          <>
+            <h1
+              className="font-arcane"
+              style={{ fontSize: 32, marginTop: 30, marginBottom: 20 }}
+            >
+              {drink?.strDrink}
+            </h1>
+            {drink?.strDrinkThumb && (
+              <Image
+                alt={`A picture of a ${drink.strDrink}`}
+                height={300}
+                src={drink?.strDrinkThumb}
+                width={300}
+              />
+            )}
+            <h2 className="font-arcane" style={{ fontSize: 20, marginTop: 20 }}>
+              Ingredients:
+            </h2>
+            {ingredientList.length > 0 &&
+              ingredientList.map((ingredient, index) => (
+                <div key={index}>
+                  <span>{ingredient.ingredient} </span>
+                  <span>{ingredient.measure}</span>
+                </div>
+              ))}
+            <div style={{ marginTop: 20 }}>
+              <span>{drink?.strInstructions}</span>
+            </div>
+            <div style={{ marginTop: 20 }}>
+              <Button onPress={() => router.replace("/mixing")}>
+                Order Drink
+              </Button>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 }
